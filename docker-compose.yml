@@ -1,0 +1,9 @@
+services:
+  backend:
+    build:
+      args:
+        DOCKER_BUILDKIT: 0
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - 3000:3000
