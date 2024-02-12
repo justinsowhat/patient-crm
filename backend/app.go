@@ -43,6 +43,9 @@ func main() {
 		protectedRoutes.POST("/patients", patientController.CreatePatient)
 		protectedRoutes.PUT("/patients", patientController.UpdatePatient)
 
+		// seed patients
+		protectedRoutes.POST("/patients/seed", patientController.SeedPatients)
+
 		// addresses
 		protectedRoutes.GET("/patients/:id/addresses", patientController.GetPatientAddresses)
 		protectedRoutes.POST("/patients/:id/addresses", patientController.CreatePatientAddresses)

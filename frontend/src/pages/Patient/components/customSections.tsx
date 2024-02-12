@@ -58,21 +58,23 @@ export const CustomSections = forwardRef<
     if (currentSectionIndex !== null) {
       const updatedSections = [...sections];
 
+      const newField = {
+        name: newFieldName,
+        dataType: newFieldType,
+        value: "",
+      };
+
+      updatedSections[currentSectionIndex].fields.push(newField);
+      setSections(updatedSections);
+
       setNewFieldName("");
       setNewFieldType("text");
       setOpenFieldDialog(false);
-      const response = await useCreateCustomField(
-        updatedSections[currentSectionIndex].id || "",
-        {
-          name: newFieldName,
-          dataType: newFieldType,
-        }
-      );
 
-      if (response?.data) {
-        updatedSections[currentSectionIndex].fields.push(response?.data);
-        setSections(updatedSections);
-      }
+      await useCreateCustomField(
+        updatedSections[currentSectionIndex].id || "",
+        newField
+      );
     }
   };
 

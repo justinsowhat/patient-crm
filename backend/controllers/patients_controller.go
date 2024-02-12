@@ -2,9 +2,11 @@ package controllers
 
 import (
 	"fmt"
+	"math/rand"
 	"net/http"
 	"patient-crm/database"
 	"patient-crm/models"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -186,4 +188,36 @@ func getCustomFieldValue(field models.CustomField) string {
 		return ""
 	}
 	return field.Values[0].Value
+}
+
+func (c *PatientController) SeedPatients(context *gin.Context) {
+	userID := context.GetString("userID")
+
+	const numberOfPatients = 25
+
+	for i := 0; i < numberOfPatients; i++ {
+		patient := generateRandomPatient()
+
+		if err := c.repo.Create(patient, userID); err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{"error": err})
+			return
+		}
+	}
+}
+
+func generateRandomPatient() *models.Patient {
+	firstNames := []string{"John", "Jane", "Mike", "Sara", "Alex"}
+	middleNames := []string{"", "Lee", "Ann", "James"}
+	lastNames := []string{"Doe", "Smith", "Johnson", "Williams"}
+	dobs := []string{"01/01/1991", "05/12/1986", "07/23/2002", "03/27/1995"}
+
+	src := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(src)
+	return &models.Patient{
+		FirstName:  firstNames[r.Intn(len(firstNames))],
+		MiddleName: middleNames[r.Intn(len(middleNames))],
+		LastName:   lastNames[r.Intn(len(lastNames))],
+		DOB:        dobs[r.Intn(len(dobs))],
+		Status:     models.ValidStatuses[r.Intn(len(models.ValidStatuses))],
+	}
 }
