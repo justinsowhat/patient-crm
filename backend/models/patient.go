@@ -13,7 +13,7 @@ const (
 	StatusChurned    Status = "Churned"
 )
 
-var validStatuses = []Status{StatusInquiry, StatusOnboarding, StatusActive, StatusChurned}
+var ValidStatuses = []Status{StatusInquiry, StatusOnboarding, StatusActive, StatusChurned}
 
 type Patient struct {
 	Base
@@ -25,7 +25,7 @@ type Patient struct {
 }
 
 func (p *Patient) SetStatus(s Status) error {
-	for _, validStatus := range validStatuses {
+	for _, validStatus := range ValidStatuses {
 		if s == validStatus {
 			p.Status = s
 			return nil

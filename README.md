@@ -33,6 +33,8 @@ Frontend is served at http://localhost:5173/
 You can sign up a user account first, and then login using that user account.
 There's no data but you can create new patients by going to Patients link in the side navigation bar, and then click the Create A Patient button to create a new patient.
 
+Alternatively, you can Click the Create Test Patients button to populate some dummy data.
+
 In the patient form, you can add custom sections and custom fields under each custom section.
 
 You can also edit existing patients.
@@ -44,3 +46,4 @@ You can also edit existing patients.
 3. Clean up the backend by break up some repositories and controllers
 4. There's a weird bug where a newly added field doesn't persist the data nor display the field name
 5. Break up the CustomSection FE components into two smaller components
+6. Ability to edit/delete custom fields and sections
