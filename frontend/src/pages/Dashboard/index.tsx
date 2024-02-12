@@ -1,7 +1,13 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 const Dashboard = () => {
-  return <Box bgcolor="grey.500">Welcome</Box>;
+  return (
+    <Box>
+      <Typography variant="h2" fontWeight={600}>
+        Welcome
+      </Typography>
+    </Box>
+  );
 };
 
 export default Dashboard;

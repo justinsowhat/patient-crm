@@ -1,24 +1,20 @@
+export type PatientStatus = "Inquiry" | "Onboarding" | "Active" | "Churned";
+
 export type Patient = {
   id?: string;
   firstName: string;
   middleName?: string;
   lastName: string;
   dob: string;
-  status: "Inquiry" | "Onboarding" | "Active" | "Churned";
-  addresses?: Address[];
+  status: PatientStatus;
 };
 
 export type Address = {
+  id?: string;
   street1: string;
   street2: string;
   city: string;
   state: string;
-  zipCode: string;
+  zip: string;
   type: string;
-};
-
-export type CustomField = {
-  fieldName: string;
-  dataType: string;
-  value?: number | string;
 };

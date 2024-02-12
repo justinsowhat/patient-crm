@@ -17,11 +17,11 @@ var validStatuses = []Status{StatusInquiry, StatusOnboarding, StatusActive, Stat
 
 type Patient struct {
 	Base
-	FirstName  string `json:"firstName"`
+	FirstName  string `json:"firstName" gorm:"not null"`
 	MiddleName string `json:"middleName"`
-	LastName   string `json:"lastName"`
-	DOB        string `json:"dob"`
-	Status     Status `json:"status"`
+	LastName   string `json:"lastName" gorm:"not null"`
+	DOB        string `json:"dob" gorm:"not null"`
+	Status     Status `json:"status" gorm:"not null"`
 }
 
 func (p *Patient) SetStatus(s Status) error {
@@ -32,19 +32,4 @@ func (p *Patient) SetStatus(s Status) error {
 		}
 	}
 	return errors.New("invalid status")
-}
-
-type PatientFilterParam struct {
-	Column string        `json:"column"`
-	Values []interface{} `json:"values"`
-}
-
-type PatientSortParam struct {
-	Column    string `json:"column"`
-	Direction string `json:"direction"`
-}
-
-type PatientPaginationParams struct {
-	Limit int `json:"limit"`
-	Page  int `json:"page"`
 }

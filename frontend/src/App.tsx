@@ -5,6 +5,7 @@ import { AuthProvider } from "./shared/components/contexts/authContext";
 import { AppRoutes } from "./AppRoutes";
 import { queryCache } from "./reactQuery";
 import { QueryClientProvider } from "react-query";
+import { EditProvider } from "./shared";
 
 function App() {
   return (
@@ -12,7 +13,9 @@ function App() {
       <ToastContainer />
       <AuthProvider>
         <QueryClientProvider client={queryCache}>
-          <AppRoutes />
+          <EditProvider>
+            <AppRoutes />
+          </EditProvider>
         </QueryClientProvider>
       </AuthProvider>
     </>

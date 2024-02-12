@@ -37,9 +37,7 @@ const Login = () => {
     try {
       const response = await axios.post("/login", formData);
       login(response.data.token);
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
+      navigate("/");
     } catch (error: any) {
       if (error?.response) {
         const errorMessage = error.response.data.error || "Login failed";

@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { Box, Button, Drawer, MenuItem, Typography } from "@mui/material";
+import { Box, Button, Drawer, MenuItem, Toolbar } from "@mui/material";
 import { useGetUser } from "../../hooks/useGetUser";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -37,7 +37,7 @@ export const SideNavBar = () => {
   );
 
   return (
-    <Box maxWidth="container.m" minWidth="container.m">
+    <Box sx={{ display: "flex", width: "100%" }}>
       <Drawer
         variant="permanent"
         sx={{
@@ -49,6 +49,7 @@ export const SideNavBar = () => {
           },
         }}
       >
+        <Toolbar /> {/* Provides spacing for content below app bar */}
         <Box marginY={5}>
           <UserHeading
             firstName={data?.firstName || ""}
@@ -57,8 +58,16 @@ export const SideNavBar = () => {
           {menuItems}
         </Box>
       </Drawer>
-      <Box flexGrow={1} position="relative" marginLeft={15}>
-        <React.Suspense fallback={<></>}>
+
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          overflowX: "hidden",
+          width: "85vw",
+        }}
+      >
+        <React.Suspense fallback={<>Loading...</>}>
           <Outlet />
         </React.Suspense>
       </Box>

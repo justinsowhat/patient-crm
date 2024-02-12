@@ -12,7 +12,7 @@ export const useGetPatient = (id: string) => {
     () =>
       axios.get<Patient>(`/patients/${id}`, {
         params: {
-          provider_id: userId,
+          user_id: userId,
         },
       }),
     {

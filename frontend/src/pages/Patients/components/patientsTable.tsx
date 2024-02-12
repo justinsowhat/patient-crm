@@ -1,53 +1,81 @@
 import {
   DataGrid,
   GridColDef,
-  GridPaginationModel,
-  GridSortModel,
+  GridFilterOperator,
+  getGridDateOperators,
+  getGridStringOperators,
 } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { useGetPatients } from "../hooks";
 import { Patient } from "../../../shared/types";
+import { statusOperators } from "./filterOperators";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router";
 
-const columns: GridColDef[] = [
-  { field: "firstName", headerName: "First name", width: 200 },
-  { field: "lastName", headerName: "Last name", width: 200 },
-  { field: "dob", headerName: "Date of Birth", width: 120 },
-  { field: "status", headerName: "Status", width: 120 },
-];
+// to simply the problem -- only allow "contains" filter for strings
+const subsetStringOperators: GridFilterOperator[] =
+  getGridStringOperators().filter((operator) => operator.value === "contains");
 
 export const PatientsTable = () => {
   const [rows, setRows] = useState<Patient[]>([]);
-  const [totalRowCount, setTotalRowCount] = useState(0);
-  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-    page: 0,
-    pageSize: 5,
-  });
-  const [sortModel, setSortModel] = useState<GridSortModel>([
-    { field: "lastName", sort: "asc" },
-  ]);
 
-  const { data, isLoading } = useGetPatients({
-    paginationModel,
-    sortModel,
-  });
+  const { data, isLoading } = useGetPatients();
+
+  const columns: GridColDef[] = [
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 100,
+      sortable: false,
+      filterOperators: [],
+      renderCell: (params) => {
+        const navigate = useNavigate();
+        const handleClick = () => {
+          const id = params.id;
+          navigate(`/patient/${id}`);
+        };
+
+        return <Button onClick={handleClick}>View</Button>;
+      },
+    },
+    {
+      field: "firstName",
+      headerName: "First name",
+      width: 200,
+      filterOperators: subsetStringOperators,
+    },
+    {
+      field: "lastName",
+      headerName: "Last name",
+      width: 200,
+      filterOperators: subsetStringOperators,
+    },
+    {
+      field: "dob",
+      headerName: "Date of Birth",
+      width: 120,
+      filterOperators: getGridDateOperators(),
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 120,
+      filterOperators: statusOperators,
+    },
+  ];
 
   useEffect(() => {
     setRows(data?.data || []);
-    setTotalRowCount(data?.total || 0);
   }, [data]);
 
+  // TODO: at some point we want to do server-side pagination/sorting/filtering if data set grows too large and load time becomes a concern
+  // But for this project, we use client-side operations to make it simpler
   return (
     <DataGrid
+      style={{ flex: 1, overflow: "auto" }}
       rows={rows}
       columns={columns}
       loading={isLoading}
-      pagination
-      paginationMode="server"
-      onPaginationModelChange={(newModel) => setPaginationModel(newModel)}
-      rowCount={totalRowCount} // Set the total row count here
-      sortingMode="server"
-      sortModel={sortModel}
-      onSortModelChange={(newSortModel) => setSortModel(newSortModel)}
     />
   );
 };

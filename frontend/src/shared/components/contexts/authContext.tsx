@@ -1,4 +1,5 @@
 import React, { createContext, useContext, ReactNode } from "react";
+import { QueryClient, useQueryClient } from "react-query";
 
 interface AuthContextType {
   isAuthenticated: boolean;

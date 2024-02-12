@@ -7,8 +7,8 @@ package models
 // there will be a new providers table, and both providers and patients table have a new foregin key user_id
 type User struct {
 	Base
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
+	FirstName string `json:"firstName" gorm:"not null"`
+	LastName  string `json:"lastName" gorm:"not null"`
 	Email     string `json:"email" gorm:"unique"`
-	Password  string `json:"password"`
+	Password  string `json:"password" gorm:"not null"`
 }

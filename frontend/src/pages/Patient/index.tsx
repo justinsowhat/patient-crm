@@ -1,75 +1,60 @@
-import { useEffect, useState } from "react";
-import { Patient } from "../../shared/types";
-import { useNavigate, useParams } from "react-router";
-import { Button, Container, TextField } from "@mui/material";
-import { useCreatePatient, useGetPatient } from "./hooks";
+import { useState } from "react";
+import { useParams } from "react-router";
+import { Box, Button } from "@mui/material";
+import { useGetPatient, useGetPatientAddresses } from "./hooks";
+import { PatientForm } from "./components/patientForm";
+import { useGetPatientCustomSectionValues } from "./hooks/useGetPatientCustomSectionValues";
+import { useEdit } from "../../shared";
 
 const PatientPage = () => {
-  const [patient, setPatient] = useState<Patient>({
-    firstName: "",
-    lastName: "",
-    dob: "01/01/1990",
-    status: "Inquiry",
-  });
-
   const { id } = useParams<{ id: string }>();
-  const { data } = useGetPatient(id || "");
-  const navigate = useNavigate();
+  const { data: patient, isLoading: isPatientDataLoading } = useGetPatient(
+    id || ""
+  );
+  const { data: addresses, isLoading: isAddressDataLoading } =
+    useGetPatientAddresses(patient?.id || "");
 
-  useEffect(() => {
-    if (data) setPatient(data);
-  }, [data]);
+  const { data: customSections, isLoading: isCustomSectionsDataLoading } =
+    useGetPatientCustomSectionValues(patient?.id || "");
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPatient({ ...patient, [e.target.name]: e.target.value });
-  };
+  const { isEdit, setIsEdit } = useEdit();
+  const isCreateMode = id === undefined;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (id) {
-      // TODO: Update existing patient
-      useGetPatient(id);
-    } else {
-      const response = await useCreatePatient(patient);
-      if (response?.data?.id) {
-        navigate(`/patient/${response?.data?.id}`);
-      }
-    }
-  };
+  // TODO: add a hamster wheel
+  if (
+    isPatientDataLoading ||
+    isAddressDataLoading ||
+    isCustomSectionsDataLoading
+  ) {
+    return <></>;
+  }
+
+  //TODO: fix the location of the buttons
 
   return (
-    <Container maxWidth="sm">
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="First Name"
-          name="firstName"
-          value={patient.firstName}
-          onChange={handleInputChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Last Name"
-          name="lastName"
-          value={patient.lastName}
-          onChange={handleInputChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Date of Birth"
-          name="dob"
-          value={patient.dob}
-          onChange={handleInputChange}
-          fullWidth
-          margin="normal"
-        />
-        {/* Add other input fields as needed */}
-        <Button type="submit" variant="contained" color="primary">
-          {id ? "Update Patient" : "Create Patient"}
+    <Box
+      width="60vw"
+      height="100vh"
+      display="flex"
+      flexDirection="column"
+      alignItems="flex-start"
+    >
+      {!isCreateMode && !isEdit && (
+        <Button
+          sx={{ marginTop: "20px", alignSelf: "flex-start" }}
+          onClick={() => setIsEdit(true)}
+        >
+          Edit
         </Button>
-      </form>
-    </Container>
+      )}
+      <PatientForm
+        patient={patient}
+        addresses={addresses}
+        customSections={customSections?.data}
+        isEditMode={isEdit}
+        isCreateMode={isCreateMode}
+      />
+    </Box>
   );
 };
 
