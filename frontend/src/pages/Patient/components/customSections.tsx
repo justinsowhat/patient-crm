@@ -71,10 +71,18 @@ export const CustomSections = forwardRef<
       setNewFieldType("text");
       setOpenFieldDialog(false);
 
-      await useCreateCustomField(
+      const response = await useCreateCustomField(
         updatedSections[currentSectionIndex].id || "",
         newField
       );
+      console.log(response);
+      if (response?.data) {
+        const fields = updatedSections[currentSectionIndex].fields;
+        fields[fields.length - 1].id = response.data.data.id;
+        console.log(response.data.data.id);
+        updatedSections[currentSectionIndex].fields = fields;
+        setSections(updatedSections);
+      }
     }
   };
 
@@ -119,6 +127,8 @@ export const CustomSections = forwardRef<
           </Grid>
           {props.editEnabled && (
             <Button
+              variant="contained"
+              color="primary"
               onClick={() => {
                 setCurrentSectionIndex(index);
                 setOpenFieldDialog(true);
@@ -133,6 +143,8 @@ export const CustomSections = forwardRef<
 
       {props.editEnabled && (
         <Button
+          variant="contained"
+          color="primary"
           sx={{ marginTop: "20px" }}
           onClick={() => setOpenSectionDialog(true)}
         >

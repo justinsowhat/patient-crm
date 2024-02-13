@@ -1,10 +1,6 @@
 import { useQuery } from "react-query";
 import { parseToken, useAxios } from "../../../shared";
-import { CustomSection } from "../../../shared/types";
-
-type AxiosResponse<T> = {
-  data: T;
-};
+import { AxiosResponse, CustomSection } from "../../../shared/types";
 
 export const useGetPatientCustomSectionValues = (patientId: string) => {
   const axios = useAxios();
