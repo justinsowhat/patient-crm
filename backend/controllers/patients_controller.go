@@ -202,7 +202,14 @@ func (c *PatientController) SeedPatients(context *gin.Context) {
 			context.JSON(http.StatusInternalServerError, gin.H{"error": err})
 			return
 		}
+
+		addresses := generateDummyAddresses()
+		if err := c.repo.CreatePatientAddresses(patient.ID.String(), addresses); err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{"error": err})
+			return
+		}
 	}
+	context.JSON(http.StatusOK, gin.H{})
 }
 
 func generateRandomPatient() *models.Patient {
@@ -219,5 +226,24 @@ func generateRandomPatient() *models.Patient {
 		LastName:   lastNames[r.Intn(len(lastNames))],
 		DOB:        dobs[r.Intn(len(dobs))],
 		Status:     models.ValidStatuses[r.Intn(len(models.ValidStatuses))],
+	}
+}
+
+func generateDummyAddresses() []*models.Address {
+	return []*models.Address{
+		{
+			Street1: "112 NE 54th St",
+			City:    "Portland",
+			State:   "Oregon",
+			Zip:     "97211",
+			Type:    "mailing",
+		},
+		{
+			Street1: "112 NE 54th St",
+			City:    "Portland",
+			State:   "Oregon",
+			Zip:     "97211",
+			Type:    "billing",
+		},
 	}
 }

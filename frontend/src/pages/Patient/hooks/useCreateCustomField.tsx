@@ -1,5 +1,5 @@
 import { useAxios } from "../../../shared";
-import { CustomField } from "../../../shared/types";
+import { AxiosResponse, CustomField } from "../../../shared/types";
 
 export const useCreateCustomField = async (
   sectionId: string,
@@ -7,7 +7,7 @@ export const useCreateCustomField = async (
 ) => {
   const axios = useAxios();
 
-  return await axios.post<CustomField>(
+  return await axios.post<AxiosResponse<CustomField>>(
     `/customSections/${sectionId}/fields`,
     field
   );

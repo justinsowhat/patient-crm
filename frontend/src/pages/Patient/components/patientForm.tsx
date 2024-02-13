@@ -133,7 +133,7 @@ export const PatientForm = ({
       {editEnabled && (
         <Container sx={{ marginTop: "30px" }}>
           <Button type="submit" variant="contained" color="primary">
-            Submit
+            {isCreateMode ? "Create" : "Save"}
           </Button>
           <Button
             sx={{ marginLeft: "20px" }}

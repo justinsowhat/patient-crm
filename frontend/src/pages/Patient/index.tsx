@@ -41,6 +41,8 @@ const PatientPage = () => {
     >
       {!isCreateMode && !isEdit && (
         <Button
+          variant="contained"
+          color="primary"
           sx={{ marginTop: "20px", alignSelf: "flex-start" }}
           onClick={() => setIsEdit(true)}
         >
