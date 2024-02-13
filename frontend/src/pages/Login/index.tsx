@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAxios } from "../../shared/hooks/useAxios";
 import {
   TextField,
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import { useAuth } from "../../shared/components/contexts";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 interface LoginFormState {
   email: string;
@@ -23,9 +23,14 @@ const Login = () => {
     password: "",
   });
 
-  const { login } = useAuth();
-
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,9 +42,7 @@ const Login = () => {
     try {
       const response = await axios.post("/login", formData);
       login(response.data.token);
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
+      location.reload();
     } catch (error: any) {
       if (error?.response) {
         const errorMessage = error.response.data.error || "Login failed";

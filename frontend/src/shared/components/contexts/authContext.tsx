@@ -13,7 +13,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   // simple auth validation; evetually you can call the BE to validate if the token has expired
   // if so, it should auto direct a user back to the log in page
-  const isAuthenticated = !!localStorage.getItem("access_token");
+  const isAuthenticated = localStorage.getItem("access_token") !== null;
 
   const login = (access_token: string) =>
     localStorage.setItem("access_token", access_token);

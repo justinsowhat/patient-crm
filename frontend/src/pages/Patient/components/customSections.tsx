@@ -75,11 +75,9 @@ export const CustomSections = forwardRef<
         updatedSections[currentSectionIndex].id || "",
         newField
       );
-      console.log(response);
       if (response?.data) {
         const fields = updatedSections[currentSectionIndex].fields;
         fields[fields.length - 1].id = response.data.data.id;
-        console.log(response.data.data.id);
         updatedSections[currentSectionIndex].fields = fields;
         setSections(updatedSections);
       }

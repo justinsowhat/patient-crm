@@ -4,7 +4,7 @@ import { useGetUser } from "../../hooks/useGetUser";
 import GroupsIcon from "@mui/icons-material/Groups";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useAuth } from "..";
-import React from "react";
+import React, { useEffect } from "react";
 import { UserHeading } from "./userHeading";
 
 export const SideNavBar = () => {
@@ -12,7 +12,13 @@ export const SideNavBar = () => {
 
   const { data } = useGetUser();
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
 
   // TODO: abstract this
   const menuItems = (
@@ -27,7 +33,7 @@ export const SideNavBar = () => {
         <Button
           onClick={() => {
             logout();
-            navigate("/login");
+            location.reload();
           }}
         >
           Log out
